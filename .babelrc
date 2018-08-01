@@ -1,0 +1,18 @@
+{
+  "env": {
+    "development": {
+      "presets": ["react", "es2015", "stage-0"],
+      "plugins": [
+        "transform-runtime",
+        "add-module-exports"
+      ]
+    },
+    "production": {
+      "presets": ["react", "es2015", "stage-0", "env", "minify"],
+      "plugins": [
+        "transform-runtime",
+        "add-module-exports"
+      ]
+    }
+  }
+}
