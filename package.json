@@ -12,6 +12,11 @@
     "lib",
     "src"
   ],
+  "respository": {
+    "type": "git",
+    "url": "https://github.com/andreacaldera/react-verdi",
+  },
+  "homepage": "https://github.com/andreacaldera/react-verdi",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.2.1",
