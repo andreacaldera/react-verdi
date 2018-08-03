@@ -1,3 +1,11 @@
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from "history";
 
-export default createBrowserHistory({});
+if (window.__REACT_COMPOSER__ && window.__REACT_COMPOSER__.history) {
+  console.log("FOUND HISTORY, USING THAT");
+}
+
+const history =
+  (window.__REACT_COMPOSER__ && window.__REACT_COMPOSER__.history) ||
+  createBrowserHistory({});
+
+export default history;
