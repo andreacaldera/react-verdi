@@ -14,7 +14,7 @@ const clientManager = ({ appName, reduxStateId, pattern, appContainerId }) => {
 
   const isActive = (location = window.location.pathname) => {
     const result = Boolean(appPattern.match(location));
-    logger(`isActive? ${location} ${result}`);
+    logger(`is app active on path ${location}? ${result}`);
     return result;
   };
 
