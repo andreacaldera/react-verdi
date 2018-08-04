@@ -1,12 +1,12 @@
 # react-verdi
 
-**This project is in incubation, stay tuned!**
+**This project is in incubation. Stay tuned for a more polished version very soon!**
 
 Composer for React applications.
 
-Enable composition of different React application within the same page.
+Enable composition of different React applications within the same page.
 
-As for every instruments in an orchestra, single applications can be played individually or orchestrated with the rest of the applications.
+As for instruments in an orchestra, single applications can be played individually or play in an orchestra alongside the rest of the applications.
 
 ## Examples
 
