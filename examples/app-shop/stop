@@ -1,0 +1,11 @@
+#!/bin/sh
+
+PID=`cat "$1"/pid`
+echo "$PID"
+
+if [ -n "$PID" ]; then
+   echo "Killing $1 $PID"
+   kill -9 "$PID"
+else
+  echo "Nothing to kill for $1, moving on..."
+fi

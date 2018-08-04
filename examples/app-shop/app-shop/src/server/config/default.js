@@ -1,0 +1,41 @@
+export default {
+  apps: [
+    {
+      name: 'app-header',
+      containerId: 'app-header',
+      appPort: 7001,
+      cssPath: '/dist/app-header.css',
+      jsPath: '/dist/app-header.js',
+      urlPathRegex: '/*',
+    },
+    {
+      disable: false,
+      name: 'app-product',
+      containerId: 'app-product',
+      appPort: 4001,
+      cssPath: '/dist/app-product.css',
+      jsPath: '/dist/app-product.js',
+      urlPathRegex: '/products/*',
+      className: 'm-4',
+    },
+    {
+      disable: false,
+      name: 'app-checkout',
+      containerId: 'app-checkout',
+      appPort: 5001,
+      cssPath: '/dist/app-checkout.css',
+      jsPath: '/dist/app-checkout.js',
+      urlPathRegex: '/checkout',
+      className: 'm-4',
+    },
+    {
+      disable: true,
+      name: 'app-footer',
+      containerId: 'app-footer',
+      appPort: 6001,
+      cssPath: '/dist/app-footer.css',
+      jsPath: '/dist/app-footer.js',
+      urlPathRegex: '/*',
+    },
+  ],
+};

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+./stop app-checkout
+
+./stop app-footer
+
+./stop app-header
+
+./stop app-product
+
+./stop app-shop

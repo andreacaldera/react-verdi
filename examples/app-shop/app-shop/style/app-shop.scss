@@ -1,0 +1,39 @@
+body {
+  padding-top: 5rem;
+}
+.starter-template {
+  padding: 3rem 0;
+}
+
+.about__applications-section {
+  list-style-type: none;
+  padding: 20px;
+}
+
+.about__application {
+  padding: 0 10px;
+}
+
+.about__application--header {
+  background-color: #292b2c;
+  color: white;
+  a {
+    color: lightblue;
+  }
+}
+
+.about__application--footer {
+  background-color: lightgrey;
+}
+
+.about__application--product {
+  background-color: #b8cdef;
+}
+
+.about__application--checkout {
+  background-color: #dbc86b;
+}
+
+.error {
+  color: red;
+}

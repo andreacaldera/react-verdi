@@ -1,0 +1,26 @@
+#!/bin/sh
+
+./kill app-checkout
+cd app-checkout
+npm start &
+cd -
+
+./kill app-footer
+cd app-footer
+npm start &
+cd -
+
+./kill app-header
+cd app-header
+npm start &
+cd -
+
+./kill app-product
+cd app-product
+npm start &
+cd -
+
+./kill app-shop
+cd app-shop
+npm start &
+cd -

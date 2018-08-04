@@ -1,0 +1,11 @@
+#!/bin/sh
+
+./build app-checkout
+
+./build app-footer
+
+./build app-header
+
+./build app-product
+
+./build app-shop

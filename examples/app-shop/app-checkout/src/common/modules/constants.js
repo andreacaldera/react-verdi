@@ -1,0 +1,3 @@
+export const NAMESPACE = 'APP_CHECKOUT_NAMESPACE';
+
+export const CHECKOUT = `${NAMESPACE}/CHECKOUT`;

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+cd app-checkout
+npm i
+cd -
+
+cd app-footer
+npm i
+cd -
+
+cd app-header
+npm i
+cd -
+
+cd app-product
+npm i
+cd -
+
+cd app-shop
+npm i
+cd -

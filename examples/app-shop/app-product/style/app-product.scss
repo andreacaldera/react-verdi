@@ -1,0 +1,30 @@
+.products-container {
+  background-color: #b8cdef;
+  padding: 10px;
+}
+
+.product--selected {
+  color: blue;
+}
+
+.missing-product {
+  border: solid 10px, yellow;
+}
+
+.product__name {
+  border: solid 5px, blue;
+}
+
+.product {
+  border-bottom: 1px solid aliceblue;
+}
+
+.product-details {
+  border-top: 1px solid aliceblue;
+  border-bottom: 1px solid aliceblue;
+}
+
+.product--add-to-bag {
+  margin-right: 5px;
+  height: 16px;
+}

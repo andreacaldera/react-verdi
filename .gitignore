@@ -1,9 +1,10 @@
-logs
-*.log
-npm-debug.log*
-
-node_modules
+**/node_modules/
+**/dist/
+**/npm-debug.log*
+**/pid
 
 lib
-
+node_modules
+npm-debug.log
+logs
 .DS_Store
