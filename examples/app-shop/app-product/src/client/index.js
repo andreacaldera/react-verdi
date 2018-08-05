@@ -20,7 +20,7 @@ import {
 
 const basePath = `http://localhost:${APP_PORT}`; // TODO remove host:port dependency
 
-const { register, history, appManager } = clientManager({
+const { register, history, appManager, logger } = clientManager({
   appName: APP_NAME,
   reduxStateId: APP_REDUX_STATE_ID,
   pattern: APP_PATTERN,
@@ -41,9 +41,11 @@ function configureApp(state) {
   appManager.store = store;
 }
 
-const fetchData = () =>
-  superagent(`${basePath}${window.location.pathname}`)
+const fetchData = () => {
+  logger('fetching data');
+  return superagent(`${basePath}${window.location.pathname}`)
     .set('Accept', 'application/json')
     .then(({ body }) => body);
+};
 
 register({ getApp, configureApp, fetchData });

@@ -10,7 +10,7 @@ const clientManager = ({
   reduxStateId,
   pattern,
   appContainerId,
-  lazyLoading = false
+  lazyLoading = true
 }) => {
   const logger = loggerFactory(appName);
 
@@ -41,7 +41,7 @@ const clientManager = ({
     fetchData = () => Promise.resolve()
   }) => {
     const initialiseApp = state => {
-      logger("initialise");
+      logger("initialising");
       configureApp(state);
       appManager.initialised = true;
     };
@@ -60,14 +60,15 @@ const clientManager = ({
       if (appManager.isActive) {
         return;
       }
-      logger("mount");
+      logger("mounting");
       appManager.isActive = true;
       return Promise.resolve().then(() => {
         if (appManager.initialised) {
-          logger("already initialised");
+          logger("already initialised, just rendering");
           return renderApp();
         }
         fetchData().then(state => {
+          logger("initialising");
           initialiseApp(state);
           return renderApp();
         });
@@ -75,7 +76,7 @@ const clientManager = ({
     }
 
     function unmount() {
-      logger("unmmount");
+      logger("unmmounting");
       appManager.isActive = false;
       unmountComponentAtNode(domElement);
     }
@@ -93,6 +94,11 @@ const clientManager = ({
     );
 
     if (!lazyLoading || window[reduxStateId]) {
+      logger(
+        `initialising app: lazy loading ${lazyLoading}, static state ${Boolean(
+          window[reduxStateId]
+        )}`
+      );
       initialiseApp(window[reduxStateId]);
     }
 
