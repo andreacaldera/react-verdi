@@ -1,4 +1,10 @@
-const loggerFactory = appName => event =>
-  console.log("[react-verdi]", `[${appName}]`, event); // eslint-disable-line no-console
+const loggerFactory = (appName) => {
+  function logger(args) {
+    if (typeof console !== 'undefined') {
+      console.log.apply(console, ['[react-verdi]', `[${appName}]`].concat(args));
+    }
+  }
+  return logger;
+};
 
 export default loggerFactory;

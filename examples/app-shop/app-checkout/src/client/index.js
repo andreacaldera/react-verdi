@@ -51,6 +51,10 @@ const configureApp = (state) => {
   const synedHistory = syncHistoryWithStore(browserHistory, store);
   appManager.synedHistory = synedHistory;
   history.listen(historyListener(store));
+  synedHistory.listen(({ pathname }) => {
+    history.replace(pathname);
+    logger(`Detected sync history change ${pathname}`);
+  });
   appManager.store = store;
 };
 

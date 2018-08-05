@@ -20,19 +20,12 @@ class App extends Component {
       <ul>{productsInBag.map((product) => <li>{product.name}</li>)}</ul>
     );
 
-    const CheckoutButton = isBasketEmpty ? (
-      <div className="btn btn-secondary mt-3">Proceed to payment</div>
-    ) : (
-      <Link
-        className="btn btn-secondary mt-3"
-        to="/checkout/payment"
-        disabled={isBasketEmpty}
-      >
+    const CheckoutButton = isBasketEmpty ? null : (
+      <Link className="ml-2 btn btn-secondary mt-3" to="/checkout/payment">
         Proceed to payment
       </Link>
     );
 
-    // TODO fix continue shopping link (links from app-checkout to app-shop don't work)
     return (
       <div>
         <h2>Checkout | Your basket</h2>
