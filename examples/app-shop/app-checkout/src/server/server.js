@@ -105,6 +105,6 @@ app.listen(APP_PORT, (error) => {
   if (error) {
     console.error(error); // eslint-disable-line no-console
   } else {
-    console.info(`${APP_NAME}: http://localhost:${APP_PORT}/`); // eslint-disable-line no-console
+    console.info(`${APP_NAME}: http://localhost:${APP_PORT}/checkout/basket`); // eslint-disable-line no-console
   }
 });

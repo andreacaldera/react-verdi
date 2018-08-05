@@ -37,7 +37,6 @@
     "react/require-default-props": 0,
     "react/prefer-stateless-function": [0, { "ignorePureComponents": true }],
     "implicit-arrow-linebreak": 0,
-    "function-paren-newline": 0,
     "react/jsx-one-expression-per-line": 0,
     "function-paren-newline": 0
   }

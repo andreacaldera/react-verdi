@@ -10,11 +10,6 @@ As for instruments in an orchestra, single applications can be played individual
 
 ## Examples
 
-### app-shop
+### Shop application
 
-- cd `examples/app-shop`
-- Install dependencies on all modules: `npm i`
-- Build module: `./build-all`
-- Start modules: `./start-all`
-
-[app-shop](http://localhost:3001)
+[app-shop](examples/app-shop/README.md)

@@ -1,7 +1,7 @@
 {
-  "name": "app-product",
-  "version": "0.0.0",
-  "description": "app-product",
+  "name": "app-checkout",
+  "version": "0.0.1",
+  "description": "app-checkout",
   "scripts": {
     "start": "node dist/server/index.js",
     "dev": "nodemon src/server/index.js --exec babel-node",
@@ -44,13 +44,13 @@
     "react-redux": "^5.0.6",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
+    "react-verdi": "file:../../../../react-verdi",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.1",
-    "redux-saga": "^0.15.6",
+    "redux-thunk": "^2.3.0",
     "reselect": "^3.0.0",
     "superagent": "^3.6.0",
-    "url-pattern": "^1.0.3",
-    "react-verdi": "file:../../react-verdi"
+    "url-pattern": "^1.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

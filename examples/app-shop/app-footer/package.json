@@ -39,7 +39,7 @@
     "prop-types": "^15.6.1",
     "qs": "^6.5.1",
     "react": "^16.3.1",
-    "react-verdi": "file:../../react-verdi",
+    "react-verdi": "file:../../../../react-verdi",
     "react-dom": "^16.3.1",
     "superagent": "^3.8.2",
     "url-pattern": "^1.0.3",

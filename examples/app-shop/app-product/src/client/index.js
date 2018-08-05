@@ -37,7 +37,6 @@ const getApp = () => {
 };
 
 function configureApp(state) {
-  console.log('configure app', state);
   const store = configureStore(state, true, clientSagas);
   appManager.store = store;
 }
