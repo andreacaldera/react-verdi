@@ -32,10 +32,14 @@ class App extends Component {
       </Link>
     );
 
+    // TODO fix continue shopping link (links from app-checkout to app-shop don't work)
     return (
       <div>
         <h2>Checkout | Your basket</h2>
         <div>{basket}</div>
+        <Link className="btn btn-secondary mt-3" to="/products">
+          Continue shopping
+        </Link>
         {CheckoutButton}
       </div>
     );

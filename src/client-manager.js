@@ -5,7 +5,13 @@ import { render, unmountComponentAtNode } from "react-dom";
 import loggerFactory from "./logger";
 import history from "./history";
 
-const clientManager = ({ appName, reduxStateId, pattern, appContainerId }) => {
+const clientManager = ({
+  appName,
+  reduxStateId,
+  pattern,
+  appContainerId,
+  lazyLoading = false
+}) => {
   const logger = loggerFactory(appName);
 
   const appPattern = new UrlPatter(pattern);
@@ -86,7 +92,7 @@ const clientManager = ({ appName, reduxStateId, pattern, appContainerId }) => {
       }
     );
 
-    if (reduxStateId && window[reduxStateId]) {
+    if (!lazyLoading || window[reduxStateId]) {
       initialiseApp(window[reduxStateId]);
     }
 
