@@ -1,6 +1,8 @@
+import { loggerFactory } from 'react-verdi';
+import { APP_NAME } from '../common/constants';
 import { NAMESPACE } from '../common/modules/constants';
 
-// TOODO replace with logger
+const logger = loggerFactory(APP_NAME);
 
 const namespace = NAMESPACE;
 
@@ -12,11 +14,10 @@ const replaceType = ({ type }) =>
   `${namespace}/${type.substring(type.indexOf('/') + 1)}`;
 
 export default (store) => {
-  console.log('init middleware');
+  logger('Initialising middleware');
   const actionSubscriber = (action) => {
-    console.log('got action', action);
     if (!isOwnAction(action) && matchTarget(action)) {
-      console.log(`subscriber is processing action ${action.type}`);
+      logger(`Subscriber is processing action ${action.type}`);
       store.dispatch({
         payload: action.payload,
         type: replaceType(action),
