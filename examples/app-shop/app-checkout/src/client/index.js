@@ -8,7 +8,7 @@ import { clientManager, history } from 'react-verdi';
 
 import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
-import reactVerdiMiddleware from './react-verdi-middleware';
+import { NAMESPACE } from '../common/modules/constants';
 
 import {
   APP_CONTAINER_ID,
@@ -17,12 +17,13 @@ import {
   APP_NAME,
 } from '../common/constants';
 
-const { register, appManager, logger } = clientManager({
+const { register, appManager, logger, reactVerdiMiddleware } = clientManager({
   appName: APP_NAME,
   reduxStateId: APP_REDUX_STATE_ID,
   pattern: APP_PATTERN,
   appContainerId: APP_CONTAINER_ID,
   lazyLoading: false,
+  namespace: NAMESPACE,
 });
 
 logger(`Using React version ${React.version}`);

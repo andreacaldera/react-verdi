@@ -3,10 +3,26 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
 import loggerFactory from './logger';
+import reactVerdiMiddlewareFactory from './react-verdi-middleware';
+
 import history from './history';
 
-const clientManager = ({ appName, reduxStateId, pattern, appContainerId, lazyLoading = true }) => {
+const clientManager = ({
+  appName,
+  reduxStateId,
+  pattern,
+  appContainerId,
+  lazyLoading = true,
+  namespace,
+}) => {
   const logger = loggerFactory(appName);
+  const reactVerdiMiddleware = namespace
+    ? reactVerdiMiddlewareFactory({
+        logger,
+        appName,
+        namespace,
+      })
+    : null;
 
   const appPattern = new UrlPatter(pattern);
 
@@ -97,6 +113,7 @@ const clientManager = ({ appName, reduxStateId, pattern, appContainerId, lazyLoa
     history,
     appManager,
     logger,
+    reactVerdiMiddleware,
   });
 };
 
