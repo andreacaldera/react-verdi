@@ -1,18 +1,15 @@
-import { eventChannel } from "redux-saga";
-import { put, call, cancelled, take } from "redux-saga/effects";
+import { eventChannel } from 'redux-saga';
+import { put, call, cancelled, take } from 'redux-saga/effects';
 
-import history from "./history";
-import loggerFactory from "./logger";
+import historyFactory from './history';
+import loggerFactory from './logger';
 
-const historySagasFactory = ({
-  appName,
-  routeChangedActionType,
-  errorActionType
-}) => {
+const historySagasFactory = ({ appName, routeChangedActionType, errorActionType }) => {
   const logger = loggerFactory(appName);
+  const history = historyFactory({ logger });
 
   function registerHistoryListener() {
-    return eventChannel(emitter => {
+    return eventChannel((emitter) => {
       history.listen(({ pathname }) => {
         logger(`history listener detected change ${history.location.pathname}`);
         emitter({ pathname });
@@ -31,7 +28,7 @@ const historySagasFactory = ({
         const action = {
           debug: `${appName}-history-listener`,
           type: routeChangedActionType,
-          payload: pathname
+          payload: pathname,
         };
         yield put(action);
       }

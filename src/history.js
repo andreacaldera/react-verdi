@@ -1,7 +1,12 @@
-import { createBrowserHistory } from "history";
+import { createBrowserHistory } from 'history';
 
-const history =
-  (window.__REACT_COMPOSER__ && window.__REACT_COMPOSER__.history) ||
-  createBrowserHistory({});
+export default ({ logger }) => {
+  const reactVerdiHistory = window.__REACT_COMPOSER__ && window.__REACT_COMPOSER__.history;
+  if (reactVerdiHistory) {
+    logger && logger('History is already present, using that');
+    return reactVerdiHistory;
+  }
 
-export default history;
+  logger && logger('Creating new history');
+  return createBrowserHistory({});
+};

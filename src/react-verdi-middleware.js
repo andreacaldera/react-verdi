@@ -1,6 +1,8 @@
-import history from './history';
+import historyFactory from './history';
 
 const reactVerdiMiddleware = ({ logger, namespace, appName, routeChangedActionType }) => {
+  const history = historyFactory({ logger });
+
   const isOwnAction = ({ type }) => type.startsWith(namespace);
 
   const matchTarget = ({ target }) => !target || target === namespace;

@@ -3,7 +3,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
 import loggerFactory from './logger';
-import history from './history';
+import historyFactory from './history';
 import reactVerdiMiddlewareFactory from './react-verdi-middleware';
 
 const clientManager = ({
@@ -16,6 +16,7 @@ const clientManager = ({
   routeChangedActionType,
 }) => {
   const logger = loggerFactory(appName);
+  const history = historyFactory({ logger });
   const reactVerdiMiddleware = namespace
     ? reactVerdiMiddlewareFactory({
         logger,

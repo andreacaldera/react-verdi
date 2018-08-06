@@ -1,9 +1,10 @@
 import React from 'react';
 import loggerFactory from './logger';
-import history from './history';
+import historyFactory from './history';
 
 const clientManager = (appName) => {
   const logger = loggerFactory(appName);
+  const history = historyFactory({ logger });
   const subscribers = [];
 
   logger(`react version: $${React.version}`);
