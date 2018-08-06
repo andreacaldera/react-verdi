@@ -5,16 +5,12 @@ import createSagaMiddleware from 'redux-saga';
 import reducer from '../modules';
 import sagas from '../modules/sagas';
 
-const configureStore = (initialState, clientMiddleware, clientSagas) => {
+const configureStore = ({ state, useLogger = false, clientSagas }) => {
   const sagaMiddleware = createSagaMiddleware();
-  const commonMiddlewares = [sagaMiddleware];
-  const middlewares = clientMiddleware ? commonMiddlewares.concat(createLogger) : commonMiddlewares;
 
-  const store = createStore(
-    reducer,
-    initialState,
-    compose(applyMiddleware(...middlewares))
-  );
+  const middlewares = [sagaMiddleware, useLogger && createLogger].filter(Boolean);
+
+  const store = createStore(reducer, state, compose(applyMiddleware(...middlewares)));
 
   sagaMiddleware.run(sagas);
   if (clientSagas) {
@@ -23,6 +19,5 @@ const configureStore = (initialState, clientMiddleware, clientSagas) => {
 
   return store;
 };
-
 
 export default configureStore;

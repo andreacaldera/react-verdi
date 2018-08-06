@@ -118,7 +118,7 @@ app.use((req, res) =>
   Promise.all(activeApps.map((appConfig) => loadAppContent(req.url, appConfig))).then(
     (appsContent) => {
       const preloadedState = { [NAMESPACE]: { meta: {} } };
-      const store = configureStore(preloadedState);
+      const store = configureStore({ state: preloadedState });
 
       const content = renderToString(
         <Provider store={store}>

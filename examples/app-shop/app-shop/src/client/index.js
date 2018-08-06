@@ -12,7 +12,11 @@ import { APP_NAME, APP_CONTAINER_ID } from '../common/constants';
 
 const { history } = portalManager(APP_NAME);
 
-const store = configureStore(window.__PARENT_APP_INITIAL_STATE__, true, clientSagas);
+const store = configureStore({
+  state: window.__PARENT_APP_INITIAL_STATE__,
+  useLogger: true,
+  clientSagas,
+});
 
 const AppRouter = () => (
   <Provider store={store}>
