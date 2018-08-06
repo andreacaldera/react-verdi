@@ -1,8 +1,8 @@
 const loggerFactory = (appName) => {
   function logger() {
     if (typeof console !== 'undefined') {
-      const args = Array.from(arguments);
-      console.log.apply(console, ['[react-verdi]', `[${appName}]`].concat(args));
+      const loggerArgs = ['[react-verdi]', `[${appName}]`].concat(Array.from(arguments));
+      console.log.apply(console, loggerArgs);
     }
   }
   return logger;

@@ -4,7 +4,7 @@ import { syncHistoryWithStore, push } from 'react-router-redux';
 import { get } from 'lodash';
 import { Provider } from 'react-redux';
 
-import { clientManager, history } from 'react-verdi';
+import { clientManager } from 'react-verdi';
 
 import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
@@ -17,7 +17,13 @@ import {
   APP_NAME,
 } from '../common/constants';
 
-const { register, appManager, logger, reactVerdiMiddleware } = clientManager({
+const {
+  register,
+  appManager,
+  logger,
+  reactVerdiMiddleware,
+  history,
+} = clientManager({
   appName: APP_NAME,
   reduxStateId: APP_REDUX_STATE_ID,
   pattern: APP_PATTERN,

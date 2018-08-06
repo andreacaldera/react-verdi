@@ -3,9 +3,8 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
 import loggerFactory from './logger';
-import reactVerdiMiddlewareFactory from './react-verdi-middleware';
-
 import history from './history';
+import reactVerdiMiddlewareFactory from './react-verdi-middleware';
 
 const clientManager = ({
   appName,

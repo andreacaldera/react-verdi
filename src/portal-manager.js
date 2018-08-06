@@ -20,6 +20,10 @@ const clientManager = (appName) => {
     },
     history,
   };
+
+  return Object.freeze({
+    history,
+  });
 };
 
 export default clientManager;
