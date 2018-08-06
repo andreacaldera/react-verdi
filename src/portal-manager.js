@@ -1,15 +1,14 @@
 import React from 'react';
 import loggerFactory from './logger';
 import historyFactory from './history';
+import reactVerdiMiddlewareFactory from './react-verdi-middleware';
 
-const clientManager = (appName) => {
+const clientManager = ({ appName, namespace, routeChangedActionType }) => {
   const logger = loggerFactory(appName);
   const history = historyFactory({ logger });
   const subscribers = [];
 
-  logger(`react version: $${React.version}`);
-
-  logger('setting up portal client');
+  logger('Setting up portal client');
 
   window.__REACT_COMPOSER__ = window.__REACT_COMPOSER__ || {
     apps: {},
@@ -22,8 +21,19 @@ const clientManager = (appName) => {
     history,
   };
 
+  const reactVerdiMiddleware = namespace
+    ? reactVerdiMiddlewareFactory({
+        logger,
+        appName,
+        namespace,
+        routeChangedActionType,
+      })
+    : null;
+
   return Object.freeze({
     history,
+    reactVerdiMiddleware,
+    logger,
   });
 };
 
