@@ -26,7 +26,6 @@ fs.writeFile('./pid', process.pid, (err) => {
   logger.info(`${APP_NAME} running with pid ${process.pid}`);
 });
 
-
 const app = Express();
 
 app.use(cors());
@@ -68,7 +67,8 @@ app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
 app.use((req, res) => {
   const { url } = req;
-  const pathname = url.indexOf('?') !== -1 ? url.substring(0, url.indexOf('?')) : url;
+  const pathname =
+    url.indexOf('?') !== -1 ? url.substring(0, url.indexOf('?')) : url;
 
   const preloadedState = { [NAMESPACE]: { selectedPage: pathname } };
 
@@ -76,7 +76,7 @@ app.use((req, res) => {
     return res.json(preloadedState);
   }
 
-  const store = configureStore(preloadedState);
+  const store = configureStore({ state: preloadedState });
 
   const content = renderToString(
     <Provider store={store}>

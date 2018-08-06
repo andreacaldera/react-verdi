@@ -76,7 +76,10 @@ app.use((req, res) => {
   }
 
   const memoryHistory = createMemoryHistory(req.url);
-  const store = configureStore(memoryHistory, preloadedState);
+  const store = configureStore({
+    history: memoryHistory,
+    state: preloadedState,
+  });
   const history = syncHistoryWithStore(memoryHistory, store);
 
   match(

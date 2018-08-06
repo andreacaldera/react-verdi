@@ -8,7 +8,6 @@ import { clientManager } from 'react-verdi';
 
 import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
-import clientSagas from './client-sagas';
 
 import {
   APP_CONTAINER_ID,
@@ -18,13 +17,22 @@ import {
   APP_PORT,
 } from '../common/constants';
 
+import { NAMESPACE } from '../common/modules/constants';
+
 const basePath = `http://localhost:${APP_PORT}`; // TODO remove host:port dependency
 
-const { register, history, appManager, logger } = clientManager({
+const {
+  register,
+  history,
+  appManager,
+  logger,
+  reactVerdiMiddleware,
+} = clientManager({
   appName: APP_NAME,
   reduxStateId: APP_REDUX_STATE_ID,
   pattern: APP_PATTERN,
   appContainerId: APP_CONTAINER_ID,
+  namespace: NAMESPACE,
 });
 
 const getApp = () => {
@@ -37,7 +45,11 @@ const getApp = () => {
 };
 
 function configureApp(state) {
-  const store = configureStore(state, true, clientSagas);
+  const store = configureStore({
+    state,
+    useLogger: true,
+    reactVerdiMiddleware,
+  });
   appManager.store = store;
 }
 

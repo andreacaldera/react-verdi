@@ -4,13 +4,12 @@ import createLogger from 'redux-logger';
 
 import reducer from '../modules';
 
-const configureStore = (
-  // TODO change params to object
+const configureStore = ({
   history,
-  initialState,
+  state,
   useLogger,
-  reactVerdiMiddleware
-) => {
+  reactVerdiMiddleware,
+}) => {
   const router = routerMiddleware(history);
 
   const middlewares = [
@@ -21,7 +20,7 @@ const configureStore = (
 
   const store = createStore(
     reducer,
-    initialState,
+    state,
     compose(applyMiddleware(...middlewares))
   );
 

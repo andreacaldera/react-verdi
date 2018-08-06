@@ -14,6 +14,7 @@ const clientManager = ({
   appContainerId,
   lazyLoading = true,
   namespace,
+  routeChangedActionType,
 }) => {
   const logger = loggerFactory(appName);
   const reactVerdiMiddleware = namespace
@@ -21,6 +22,7 @@ const clientManager = ({
         logger,
         appName,
         namespace,
+        routeChangedActionType,
       })
     : null;
 
@@ -73,7 +75,7 @@ const clientManager = ({
           logger('Already initialised, just rendering');
           return renderApp();
         }
-        fetchData().then((state) => {
+        fetchData().then((state = {}) => {
           logger('Initialising');
           initialiseApp(state);
           return renderApp();

@@ -2,13 +2,11 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
-import superagent from 'superagent';
 
 import { clientManager } from 'react-verdi';
 
 import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
-import clientSagas from './client-sagas';
 
 import {
   APP_CONTAINER_ID,
@@ -16,17 +14,16 @@ import {
   APP_PATTERN,
   APP_NAME,
 } from '../common/constants';
+import { NAMESPACE, ROUTE_CHANGED } from '../common/modules/constants';
 
-const { register, history, appManager } = clientManager({
+const { register, history, appManager, reactVerdiMiddleware } = clientManager({
   appName: APP_NAME,
   reduxStateId: APP_REDUX_STATE_ID,
   pattern: APP_PATTERN,
   appContainerId: APP_CONTAINER_ID,
+  namespace: NAMESPACE,
+  routeChangedActionType: ROUTE_CHANGED,
 });
-
-const fetchData = () =>
-  // TODO fix this, child app might run on different host / port
-  superagent(`${window.location.href}`).set('Accept', 'application/json');
 
 const getApp = () => {
   const App = () => (
@@ -38,8 +35,12 @@ const getApp = () => {
 };
 
 const configureApp = (state) => {
-  const store = configureStore(state, true, clientSagas);
+  const store = configureStore({
+    state,
+    useLogger: true,
+    reactVerdiMiddleware,
+  });
   appManager.store = store;
 };
 
-register({ getApp, configureApp, fetchData });
+register({ getApp, configureApp });

@@ -98,7 +98,7 @@ app.use((req, res) => {
     return res.json(preloadedState);
   }
 
-  const store = configureStore(preloadedState);
+  const store = configureStore({ state: preloadedState });
 
   const content = renderToString(
     <Provider store={store}>

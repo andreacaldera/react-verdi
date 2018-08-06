@@ -43,12 +43,12 @@ const historyListener = (store) => ({ pathname }) => {
 
 const configureApp = (state) => {
   logger('Configuring app');
-  const store = configureStore(
-    browserHistory,
+  const store = configureStore({
+    history: browserHistory,
     state,
-    true,
-    reactVerdiMiddleware
-  );
+    useLogger: true,
+    reactVerdiMiddleware,
+  });
   const synedHistory = syncHistoryWithStore(browserHistory, store);
   appManager.synedHistory = synedHistory;
   history.listen(historyListener(store));
