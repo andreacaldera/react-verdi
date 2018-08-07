@@ -1,7 +1,7 @@
 import loggerFactory from './logger';
 import historyFactory from './history';
 import reactVerdiMiddlewareFactory from './react-verdi-middleware';
-import portalMiddlewareFactory from './portal-middleware';
+import portalMiddlewareFactory from './middlware/portal-middleware';
 
 const clientManager = ({ appName, namespace, routeChangedActionType }) => {
   const logger = loggerFactory(appName);
