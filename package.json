@@ -1,6 +1,6 @@
 {
   "name": "react-verdi",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "react-verdi",
   "main": "./lib/index.js",
   "author": "andrea.caldera@gmail.com",
