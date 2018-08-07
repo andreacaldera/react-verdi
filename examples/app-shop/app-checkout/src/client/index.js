@@ -3,6 +3,7 @@ import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore, push } from 'react-router-redux';
 import { get } from 'lodash';
 import { Provider } from 'react-redux';
+import createLogger from 'redux-logger';
 
 import { clientManager } from 'react-verdi';
 
@@ -22,6 +23,7 @@ const {
   appManager,
   logger,
   reactVerdiMiddleware,
+  subscriberMiddleware,
   history,
 } = clientManager({
   appName: APP_NAME,
@@ -52,8 +54,7 @@ const configureApp = (state) => {
   const store = configureStore({
     history: browserHistory,
     state,
-    useLogger: true,
-    reactVerdiMiddleware,
+    middlewares: [createLogger, reactVerdiMiddleware, subscriberMiddleware],
   });
   const synedHistory = syncHistoryWithStore(browserHistory, store);
   appManager.synedHistory = synedHistory;

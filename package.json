@@ -40,7 +40,6 @@
     "history": "^4.7.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "redux-saga": "^0.16.0",
     "superagent": "^3.8.3",
     "url-pattern": "^1.0.3"
   },

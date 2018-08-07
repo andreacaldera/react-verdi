@@ -2,6 +2,7 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
+import createLogger from 'redux-logger';
 
 import { clientManager } from 'react-verdi';
 
@@ -37,8 +38,7 @@ const getApp = () => {
 const configureApp = (state) => {
   const store = configureStore({
     state,
-    useLogger: true,
-    reactVerdiMiddleware,
+    middlewares: [createLogger, reactVerdiMiddleware],
   });
   appManager.store = store;
 };

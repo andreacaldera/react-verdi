@@ -1,17 +1,12 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import createLogger from 'redux-logger';
 
 import reducer from '../modules';
 
-const configureStore = ({ state, useLogger = false, reactVerdiMiddleware }) => {
-  const middlewares = [useLogger && createLogger, reactVerdiMiddleware].filter(
-    Boolean
-  );
-
+const configureStore = ({ state, middlewares = [] }) => {
   const store = createStore(
     reducer,
     state,
-    compose(applyMiddleware(...middlewares))
+    compose(applyMiddleware(...middlewares.filter(Boolean)))
   );
 
   return store;

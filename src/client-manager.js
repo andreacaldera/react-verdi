@@ -5,6 +5,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import loggerFactory from './logger';
 import historyFactory from './history';
 import reactVerdiMiddlewareFactory from './react-verdi-middleware';
+import subscriberMiddlewareFactory from './middleware/subscriber-middleware';
 
 const clientManager = ({
   appName,
@@ -25,6 +26,11 @@ const clientManager = ({
         routeChangedActionType,
       })
     : null;
+
+  const subscriberMiddleware = subscriberMiddlewareFactory({
+    logger,
+    namespace,
+  });
 
   const appPattern = new UrlPatter(pattern);
 
@@ -47,7 +53,11 @@ const clientManager = ({
     apps: {},
   };
 
-  const register = ({ getApp, configureApp = () => {}, fetchData = () => Promise.resolve() }) => {
+  const register = ({
+    getApp,
+    configureApp = () => {},
+    fetchData = () => Promise.resolve(),
+  }) => {
     const initialiseApp = (state) => {
       logger('initialising');
       configureApp(state);
@@ -89,13 +99,17 @@ const clientManager = ({
       unmountComponentAtNode(domElement);
     }
 
-    window.__REACT_COMPOSER__.apps = Object.assign({}, window.__REACT_COMPOSER__.apps, {
-      [appName]: {
-        mount,
-        unmount,
-        isActive,
-      },
-    });
+    window.__REACT_COMPOSER__.apps = Object.assign(
+      {},
+      window.__REACT_COMPOSER__.apps,
+      {
+        [appName]: {
+          mount,
+          unmount,
+          isActive,
+        },
+      }
+    );
 
     if (!lazyLoading || window[reduxStateId]) {
       logger(
@@ -116,6 +130,7 @@ const clientManager = ({
     appManager,
     logger,
     reactVerdiMiddleware,
+    subscriberMiddleware,
   });
 };
 

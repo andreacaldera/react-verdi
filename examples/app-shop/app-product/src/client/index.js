@@ -3,6 +3,7 @@ import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import superagent from 'superagent';
 import { renderRoutes } from 'react-router-config';
+import createLogger from 'redux-logger';
 
 import { clientManager } from 'react-verdi';
 
@@ -17,7 +18,7 @@ import {
   APP_PORT,
 } from '../common/constants';
 
-import { NAMESPACE } from '../common/modules/constants';
+import { NAMESPACE, ROUTE_CHANGED } from '../common/modules/constants';
 
 const basePath = `http://localhost:${APP_PORT}`; // TODO remove host:port dependency
 
@@ -33,6 +34,7 @@ const {
   pattern: APP_PATTERN,
   appContainerId: APP_CONTAINER_ID,
   namespace: NAMESPACE,
+  routeChangedActionType: ROUTE_CHANGED,
 });
 
 const getApp = () => {
@@ -47,8 +49,7 @@ const getApp = () => {
 function configureApp(state) {
   const store = configureStore({
     state,
-    useLogger: true,
-    reactVerdiMiddleware,
+    middlewares: [createLogger, reactVerdiMiddleware],
   });
   appManager.store = store;
 }

@@ -1,22 +1,18 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import createLogger from 'redux-logger';
+
 import createSagaMiddleware from 'redux-saga';
 
 import reducer from '../modules';
 import checkoutSagas from '../modules/checkout-sagas';
 
-const configureStore = ({ state, reactVerdiMiddleware, useLogger }) => {
+const configureStore = ({ state, middlewares = [] }) => {
   const sagaMiddleware = createSagaMiddleware();
-  const middlewares = [
-    sagaMiddleware,
-    reactVerdiMiddleware,
-    useLogger && createLogger,
-  ].filter(Boolean);
+  const activeMiddlewares = [sagaMiddleware, ...middlewares.filter(Boolean)];
 
   const store = createStore(
     reducer,
     state,
-    compose(applyMiddleware(...middlewares))
+    compose(applyMiddleware(...activeMiddlewares))
   );
 
   sagaMiddleware.run(checkoutSagas);
