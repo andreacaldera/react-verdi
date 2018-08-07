@@ -12,10 +12,7 @@
     "lib",
     "src"
   ],
-  "respository": {
-    "type": "git",
-    "url": "https://github.com/andreacaldera/react-verdi"
-  },
+  "respository": "https://github.com/andreacaldera/react-verdi",
   "homepage": "https://github.com/andreacaldera/react-verdi",
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -47,8 +44,6 @@
     "history": "^4.7.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "redux-saga": "^0.16.0",
-    "superagent": "^3.8.3",
     "url-pattern": "^1.0.3"
   }
 }

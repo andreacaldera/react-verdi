@@ -29,7 +29,7 @@ export default {
       className: 'm-4',
     },
     {
-      disable: true,
+      disable: false,
       name: 'app-footer',
       containerId: 'app-footer',
       appPort: 6001,

@@ -9,7 +9,7 @@ import { renderRoutes } from 'react-router-config';
 import superagent from 'superagent';
 import fs from 'fs';
 
-import config from './config/default';
+import config from '../config/default';
 import logger from './logger';
 import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
@@ -18,7 +18,9 @@ import { NAMESPACE } from '../common/modules/constants';
 import api from './api';
 
 fs.writeFile('./pid', process.pid, (err) => {
-  if (err) throw err;
+  if (err) {
+    throw err;
+  }
   logger.info(`${APP_NAME} running with pid ${process.pid}`);
 });
 
@@ -37,12 +39,17 @@ function renderFullPage(content, appsContent, store) {
   const cssLinks = activeApps
     .map(
       (appConfig) =>
-        `<link rel="stylesheet" type="text/css" href="${appUrl(appConfig)}${appConfig.cssPath}" />`
+        `<link rel="stylesheet" type="text/css" href="${appUrl(appConfig)}${
+          appConfig.cssPath
+        }" />`
     )
     .join(' ');
 
   const jsLinks = activeApps
-    .map((appConfig) => `<script src="${appUrl(appConfig)}${appConfig.jsPath}"></script>`)
+    .map(
+      (appConfig) =>
+        `<script src="${appUrl(appConfig)}${appConfig.jsPath}"></script>`
+    )
     .join(' ');
 
   const appsHtml = appsContent
@@ -87,9 +94,14 @@ app.use('/api', api());
 
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
-const loadAppContent = (url, { name, urlPathRegex, containerId, className, appPort }) => {
+const loadAppContent = (
+  url,
+  { name, urlPathRegex, containerId, className, appPort }
+) => {
   const matches = url.match(new RegExp(urlPathRegex));
-  logger.info(`Matching ${name} on URL ${url} using regex ${urlPathRegex}: ${matches}`);
+  logger.debug(
+    `Matching ${name} on URL ${url} using regex ${urlPathRegex}: ${matches}`
+  );
   if (!matches) {
     return {
       html: '',
@@ -115,21 +127,21 @@ const loadAppContent = (url, { name, urlPathRegex, containerId, className, appPo
 };
 
 app.use((req, res) =>
-  Promise.all(activeApps.map((appConfig) => loadAppContent(req.url, appConfig))).then(
-    (appsContent) => {
-      const preloadedState = { [NAMESPACE]: { meta: {} } };
-      const store = configureStore({ state: preloadedState });
+  Promise.all(
+    activeApps.map((appConfig) => loadAppContent(req.url, appConfig))
+  ).then((appsContent) => {
+    const preloadedState = { [NAMESPACE]: { meta: {} } };
+    const store = configureStore({ state: preloadedState });
 
-      const content = renderToString(
-        <Provider store={store}>
-          <StaticRouter location={req.url} context={{}}>
-            {renderRoutes(routes)}
-          </StaticRouter>
-        </Provider>
-      );
-      res.send(renderFullPage(content, appsContent, store));
-    }
-  )
+    const content = renderToString(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={{}}>
+          {renderRoutes(routes)}
+        </StaticRouter>
+      </Provider>
+    );
+    res.send(renderFullPage(content, appsContent, store));
+  })
 );
 
 app.listen(port, (err) => {

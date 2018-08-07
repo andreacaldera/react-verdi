@@ -1,10 +1,6 @@
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
 
-import {
-  NAMESPACE,
-  ROUTE_CHANGED,
-} from './constants';
+import { NAMESPACE, ROUTE_CHANGED } from './constants';
 
 const selectedPage = (state = [], action) => {
   switch (action.type) {
@@ -20,6 +16,5 @@ const appReducers = combineReducers({
 });
 
 module.exports = combineReducers({
-  routing: routerReducer,
   [NAMESPACE]: appReducers,
 });

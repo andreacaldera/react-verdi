@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { without, get } from 'lodash';
-import { routerReducer } from 'react-router-redux';
 import UrlPatter from 'url-pattern';
 
 import { APP_PATTERN } from '../constants';
@@ -44,6 +43,5 @@ const appReducers = combineReducers({
 });
 
 module.exports = combineReducers({
-  routing: routerReducer,
   [NAMESPACE]: appReducers,
 });
