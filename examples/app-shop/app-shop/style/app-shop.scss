@@ -1,8 +1,7 @@
+@import '../../styles/colours';
+
 body {
   padding-top: 5rem;
-}
-.starter-template {
-  padding: 3rem 0;
 }
 
 .about__applications-section {
@@ -11,27 +10,37 @@ body {
 }
 
 .about__application {
-  padding: 0 10px;
+  padding: 20px;
+}
+
+.application__link {
+  margin-right: 15px;
 }
 
 .about__application--header {
-  background-color: #292b2c;
-  color: white;
-  a {
-    color: lightblue;
+  background-color: $app-header-background-colour;
+  color: $app-header-font-colour;
+  a,
+  a:hover {
+    color: $app-header-font-colour;
   }
 }
 
 .about__application--footer {
-  background-color: lightgrey;
+  background-color: $app-footer-background-colour;
+  color: $app-footer-font-colour;
+  a,
+  a:hover {
+    color: $app-footer-font-colour;
+  }
 }
 
 .about__application--product {
-  background-color: #b8cdef;
+  background-color: $app-product-background-colour;
 }
 
 .about__application--checkout {
-  background-color: #dbc86b;
+  background-color: $app-checkout-background-colour;
 }
 
 .error {

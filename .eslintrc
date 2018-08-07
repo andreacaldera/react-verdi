@@ -2,7 +2,7 @@
   "parser": "babel-eslint",
   "extends": "airbnb",
   "env": {
-    "node": true,
+    "node": true
   },
   "globals": {
     "window": true,
@@ -17,13 +17,16 @@
     "no-underscore-dangle": 0,
     "new-cap": 0,
     "arrow-parens": ["error", "always"],
-    "comma-dangle": ["error", {
-      "arrays": "always-multiline",
-      "objects": "always-multiline",
-      "imports": "always-multiline",
-      "exports": "always-multiline",
-      "functions": "ignore",
-    }],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "ignore"
+      }
+    ],
     "no-confusing-arrow": 0,
     "react/prefer-es6-class": 0,
     "react/jsx-sort-props": 0,
@@ -34,11 +37,12 @@
     "jsx-a11y/label-has-for": [
       2,
       {
-        required: { every: ["id"] },
-      },
+        "required": { "every": ["id"] }
+      }
     ],
     "implicit-arrow-linebreak": 0,
     "react/jsx-one-expression-per-line": 0,
-    "function-paren-newline": 0
+    "function-paren-newline": 0,
+    "operator-linebreak": 0
   }
 }

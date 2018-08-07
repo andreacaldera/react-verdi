@@ -1,6 +1,11 @@
+@import '../../styles/colours';
+
 .footer {
-  background-color: lightgrey;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: $app-footer-background-colour;
+  color: $app-footer-font-colour;
   font-size: 12px;
-  margin-top: 20px;
-  padding: 5px;
+  padding: 10px;
 }

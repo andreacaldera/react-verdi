@@ -1,5 +1,7 @@
+@import '../../styles/colours';
+
 .products-container {
-  background-color: #b8cdef;
+  background-color: $app-product-background-colour;
   padding: 10px;
 }
 

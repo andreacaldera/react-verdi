@@ -1,4 +1,6 @@
+@import '../../styles/colours';
+
 .checkout-container {
-  background-color: #dbc86b;
+  background-color: $app-checkout-background-colour;
   padding: 10px;
 }

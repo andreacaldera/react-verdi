@@ -7,7 +7,7 @@ import MenuItem from './MenuItem';
 class TopNav extends Component {
   render() {
     return (
-      <nav className="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+      <nav className="navbar navbar-toggleable-md fixed-top">
         <button
           className="navbar-toggler navbar-toggler-right"
           type="button"
@@ -15,9 +15,7 @@ class TopNav extends Component {
         >
           <span className="navbar-toggler-icon" />
         </button>
-        <Link className="navbar-brand" to="/">
-          Shop
-        </Link>
+        <div className="navbar-brand">react-verdi | app-shop</div>
 
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav mr-auto">
