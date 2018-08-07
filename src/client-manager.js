@@ -4,8 +4,9 @@ import { render, unmountComponentAtNode } from 'react-dom';
 
 import loggerFactory from './logger';
 import historyFactory from './history';
-import reactVerdiMiddlewareFactory from './react-verdi-middleware';
 import subscriberMiddlewareFactory from './middleware/subscriber-middleware';
+import publisherMiddlewareFactory from './middleware/publisher-middleware';
+import historyMiddlewareFactory from './middleware/history-middleware';
 
 const clientManager = ({
   appName,
@@ -18,18 +19,19 @@ const clientManager = ({
 }) => {
   const logger = loggerFactory(appName);
   const history = historyFactory({ logger });
-  const reactVerdiMiddleware = namespace
-    ? reactVerdiMiddlewareFactory({
-        logger,
-        appName,
-        namespace,
-        routeChangedActionType,
-      })
-    : null;
 
   const subscriberMiddleware = subscriberMiddlewareFactory({
     logger,
     namespace,
+  });
+
+  const publisherMiddleware = publisherMiddlewareFactory({
+    logger,
+  });
+
+  const historyMiddleware = historyMiddlewareFactory({
+    logger,
+    routeChangedActionType,
   });
 
   const appPattern = new UrlPatter(pattern);
@@ -129,8 +131,9 @@ const clientManager = ({
     history,
     appManager,
     logger,
-    reactVerdiMiddleware,
     subscriberMiddleware,
+    publisherMiddleware,
+    historyMiddleware,
   });
 };
 

@@ -1,7 +1,9 @@
 import loggerFactory from './logger';
 import historyFactory from './history';
-import reactVerdiMiddlewareFactory from './react-verdi-middleware';
-import portalMiddlewareFactory from './middlware/portal-middleware';
+import portalMiddlewareFactory from './middleware/portal-middleware';
+import publisherMiddlewareFactory from './middleware/publisher-middleware';
+import subscriberMiddlewareFactory from './middleware/subscriber-middleware';
+import historyMiddlewareFactory from './middleware/history-middleware';
 
 const clientManager = ({ appName, namespace, routeChangedActionType }) => {
   const logger = loggerFactory(appName);
@@ -21,14 +23,17 @@ const clientManager = ({ appName, namespace, routeChangedActionType }) => {
     history,
   };
 
-  const reactVerdiMiddleware = namespace
-    ? reactVerdiMiddlewareFactory({
-        logger,
-        appName,
-        namespace,
-        routeChangedActionType,
-      })
-    : null;
+  const subscriberMiddleware = subscriberMiddlewareFactory({
+    logger,
+    namespace,
+  });
+
+  const publisherMiddleware = publisherMiddlewareFactory({ logger });
+
+  const historyMiddleware = historyMiddlewareFactory({
+    logger,
+    routeChangedActionType,
+  });
 
   const portalMiddleware = portalMiddlewareFactory({
     routeChangedActionType,
@@ -37,8 +42,10 @@ const clientManager = ({ appName, namespace, routeChangedActionType }) => {
 
   return Object.freeze({
     history,
-    reactVerdiMiddleware,
     portalMiddleware,
+    publisherMiddleware,
+    subscriberMiddleware,
+    historyMiddleware,
     logger,
   });
 };

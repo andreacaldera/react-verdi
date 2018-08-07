@@ -27,7 +27,9 @@ const {
   history,
   appManager,
   logger,
-  reactVerdiMiddleware,
+  publisherMiddleware,
+  subscriberMiddleware,
+  historyMiddleware,
 } = clientManager({
   appName: APP_NAME,
   reduxStateId: APP_REDUX_STATE_ID,
@@ -49,7 +51,12 @@ const getApp = () => {
 function configureApp(state) {
   const store = configureStore({
     state,
-    middlewares: [createLogger, reactVerdiMiddleware],
+    middlewares: [
+      createLogger,
+      publisherMiddleware,
+      subscriberMiddleware,
+      historyMiddleware,
+    ],
   });
   appManager.store = store;
 }

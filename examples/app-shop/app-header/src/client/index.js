@@ -17,7 +17,14 @@ import {
 } from '../common/constants';
 import { NAMESPACE, ROUTE_CHANGED } from '../common/modules/constants';
 
-const { register, history, appManager, reactVerdiMiddleware } = clientManager({
+const {
+  register,
+  history,
+  appManager,
+  publisherMiddleware,
+  subscriberMiddleware,
+  historyMiddleware,
+} = clientManager({
   appName: APP_NAME,
   reduxStateId: APP_REDUX_STATE_ID,
   pattern: APP_PATTERN,
@@ -38,7 +45,12 @@ const getApp = () => {
 const configureApp = (state) => {
   const store = configureStore({
     state,
-    middlewares: [createLogger, reactVerdiMiddleware],
+    middlewares: [
+      createLogger,
+      publisherMiddleware,
+      subscriberMiddleware,
+      historyMiddleware,
+    ],
   });
   appManager.store = store;
 };

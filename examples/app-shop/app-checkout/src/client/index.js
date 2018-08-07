@@ -22,8 +22,9 @@ const {
   register,
   appManager,
   logger,
-  reactVerdiMiddleware,
+  publisherMiddleware,
   subscriberMiddleware,
+  historyMiddleware,
   history,
 } = clientManager({
   appName: APP_NAME,
@@ -54,7 +55,12 @@ const configureApp = (state) => {
   const store = configureStore({
     history: browserHistory,
     state,
-    middlewares: [createLogger, reactVerdiMiddleware, subscriberMiddleware],
+    middlewares: [
+      createLogger,
+      publisherMiddleware,
+      subscriberMiddleware,
+      historyMiddleware,
+    ],
   });
   const synedHistory = syncHistoryWithStore(browserHistory, store);
   appManager.synedHistory = synedHistory;

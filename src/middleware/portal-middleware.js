@@ -1,4 +1,4 @@
-const reactVerdiMiddleware = ({ logger, routeChangedActionType }) => () => {
+const portalMiddleware = ({ logger, routeChangedActionType }) => () => {
   logger('Initialising portal middleware');
 
   const refreshApp = (app, pathname) =>
@@ -18,4 +18,4 @@ const reactVerdiMiddleware = ({ logger, routeChangedActionType }) => () => {
   };
 };
 
-export default reactVerdiMiddleware;
+export default portalMiddleware;

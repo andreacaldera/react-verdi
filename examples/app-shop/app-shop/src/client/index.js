@@ -15,8 +15,10 @@ import { ROUTE_CHANGED } from '../../node_modules/react-verdi/examples/app-shop/
 const {
   history,
   logger,
-  reactVerdiMiddleware,
   portalMiddleware,
+  publisherMiddleware,
+  subscriberMiddleware,
+  historyMiddleware,
 } = portalManager({
   appName: APP_NAME,
   namespace: NAMESPACE,
@@ -27,7 +29,13 @@ logger(`React version: $${React.version}`);
 
 const store = configureStore({
   state: window.__PARENT_APP_INITIAL_STATE__,
-  middlewares: [reactVerdiMiddleware, portalMiddleware, createLogger],
+  middlewares: [
+    publisherMiddleware,
+    subscriberMiddleware,
+    historyMiddleware,
+    portalMiddleware,
+    createLogger,
+  ],
 });
 
 const AppRouter = () => (
