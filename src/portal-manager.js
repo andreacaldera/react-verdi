@@ -1,7 +1,7 @@
-import React from 'react';
 import loggerFactory from './logger';
 import historyFactory from './history';
 import reactVerdiMiddlewareFactory from './react-verdi-middleware';
+import portalMiddlewareFactory from './portal-middleware';
 
 const clientManager = ({ appName, namespace, routeChangedActionType }) => {
   const logger = loggerFactory(appName);
@@ -30,9 +30,15 @@ const clientManager = ({ appName, namespace, routeChangedActionType }) => {
       })
     : null;
 
+  const portalMiddleware = portalMiddlewareFactory({
+    routeChangedActionType,
+    logger,
+  });
+
   return Object.freeze({
     history,
     reactVerdiMiddleware,
+    portalMiddleware,
     logger,
   });
 };

@@ -1,13 +1,20 @@
 import historyFactory from './history';
 
-const reactVerdiMiddleware = ({ logger, namespace, appName, routeChangedActionType }) => {
+// TODO split this into history-middleware and publisher-middleware
+const reactVerdiMiddleware = ({
+  logger,
+  namespace,
+  appName,
+  routeChangedActionType,
+}) => {
   const history = historyFactory({ logger });
 
   const isOwnAction = ({ type }) => type.startsWith(namespace);
 
   const matchTarget = ({ target }) => !target || target === namespace;
 
-  const replaceType = ({ type }) => `${namespace}/${type.substring(type.indexOf('/') + 1)}`;
+  const replaceType = ({ type }) =>
+    `${namespace}/${type.substring(type.indexOf('/') + 1)}`;
 
   const actionSubscriber = (store) => (action) => {
     if (!isOwnAction(action) && matchTarget(action)) {
@@ -20,7 +27,7 @@ const reactVerdiMiddleware = ({ logger, namespace, appName, routeChangedActionTy
   };
 
   const historyListener = (store) => ({ pathname }) => {
-    logger(`history listener detected change ${history.location.pathname}`);
+    logger(`History listener detected change ${history.location.pathname}`);
 
     store.dispatch({
       debug: `${appName}-history-listener`,
@@ -30,7 +37,7 @@ const reactVerdiMiddleware = ({ logger, namespace, appName, routeChangedActionTy
   };
 
   return (store) => {
-    logger('Initialising middleware');
+    logger('Initialising react-verdi middleware');
 
     window.__REACT_COMPOSER__.subscribe(actionSubscriber(store));
 
