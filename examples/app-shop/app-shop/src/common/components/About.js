@@ -5,8 +5,13 @@ const About = () => (
   <div>
     <h1>About</h1>
 
-    <p>This is a template for React microservices</p>
-    <p>The following is a list of the applications</p>
+    <p>
+      <strong>react-verdi | app-shop</strong>
+    </p>
+    <p>
+      The following is a list of the applications available within app-shop,
+      click on the links to use those application in isolation.
+    </p>
     <ul className="about__applications-section">
       <li className="about__application about__application--header">
         <a
