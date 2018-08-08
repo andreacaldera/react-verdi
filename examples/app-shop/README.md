@@ -1,7 +1,6 @@
-# Shop application
+# app-shop
 
-- Install dependencies on all modules: `npm i`
+- Install dependencies on all modules: `./install-all`
 - Build module: `./build-all`
 - Start modules: `./start-all`
-
-[app-shop](http://localhost:3001)
+- Navigate to [app-shop](http://localhost:3001)

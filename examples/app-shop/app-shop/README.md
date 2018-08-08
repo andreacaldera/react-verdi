@@ -1,1 +1,1 @@
-# Parent application
+# app-shop
