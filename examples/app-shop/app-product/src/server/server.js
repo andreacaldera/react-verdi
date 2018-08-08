@@ -29,6 +29,11 @@ fs.writeFile('./pid', process.pid, (err) => {
   logger.info(`${APP_NAME} running with pid ${process.pid}`);
 });
 
+const port = global.process.env.PORT || APP_PORT;
+
+const baseUrl =
+  global.process.env.APP_PRODUCT_BASE_URL || `http://localhost:${port}`;
+
 const urlPattern = new UrlPatter(APP_PATTERN);
 
 const products = {
@@ -58,14 +63,14 @@ function renderFullPage(content, store) {
     <!doctype html>
     <html>
       <head>
-        <link rel="stylesheet" type="text/css" href="http://localhost:${APP_PORT}/dist/${APP_NAME}.css" />
+        <link rel="stylesheet" type="text/css" href="${baseUrl}/dist/${APP_NAME}.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
       <title>Product</title>
       </head>
       <body>
         <div id="${APP_CONTAINER_ID}">${content}</div>
         <script>window.${APP_REDUX_STATE_ID} = ${stateString}</script>
-      <script src="http://localhost:${APP_PORT}/dist/${APP_NAME}.js"></script>
+      <script src="${baseUrl}/dist/${APP_NAME}.js"></script>
       </body>
     </html>
     `;
@@ -91,6 +96,7 @@ app.use((req, res) => {
     [NAMESPACE]: {
       selectedProductId,
       products,
+      baseUrl,
     },
   };
 
@@ -113,10 +119,10 @@ app.use((req, res) => {
   res.send(html);
 });
 
-app.listen(APP_PORT, (error) => {
+app.listen(port, (error) => {
   if (error) {
     logger.error(error);
   } else {
-    logger.info(`${APP_NAME}: http://localhost:${APP_PORT}/products`);
+    logger.info(`${APP_NAME}: http://localhost:${port}/products`);
   }
 });

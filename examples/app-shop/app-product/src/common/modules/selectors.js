@@ -12,6 +12,11 @@ export const getProductList = createSelector(getRootSelector, ({ products }) =>
   Object.values(products)
 );
 
+export const getBaseUrl = createSelector(
+  getRootSelector,
+  ({ baseUrl }) => baseUrl
+);
+
 export const getProductIdsInBag = createSelector(
   getRootSelector,
   ({ productIdsInBag }) => productIdsInBag

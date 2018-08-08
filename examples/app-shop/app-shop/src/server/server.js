@@ -25,7 +25,7 @@ fs.writeFile('./pid', process.pid, (err) => {
 });
 
 const app = Express();
-const port = 8080;
+const port = global.process.env.PORT || 8080;
 
 const activeApps = config.apps.filter(({ disable }) => !disable);
 
@@ -33,7 +33,13 @@ app.use(cookieParser());
 
 const serialiseState = (state) => JSON.stringify(state).replace(/</g, '\\x3c');
 
-const appUrl = ({ appPort }) => `http://localhost:${appPort}`;
+const appEnvBaseVariable = (name = '') =>
+  `${name.toUpperCase().replace('-', '_')}_BASE_URL`;
+
+const appUrl = ({ name, appPort }) => {
+  const baseUrl = global.process.env[appEnvBaseVariable(name)];
+  return baseUrl || `http://localhost:${appPort}`;
+};
 
 function renderFullPage(content, appsContent, store) {
   const cssLinks = activeApps
@@ -62,6 +68,17 @@ function renderFullPage(content, appsContent, store) {
     )
     .join(' ');
 
+  // TODO remove this terrible hack for passing apps URLs to client
+  const appUrls = activeApps
+    .map(
+      (appConfig) => `
+        <script>window['${appEnvBaseVariable(appConfig.name)}'] = '${appUrl(
+        appConfig
+      )}';</script>
+      `
+    )
+    .join(' ');
+
   const serialisedState = serialiseState(store.getState());
 
   return `
@@ -80,6 +97,7 @@ function renderFullPage(content, appsContent, store) {
         ${appsHtml}
         <script>window.__PARENT_APP_INITIAL_STATE__ = ${serialisedState}</script>
         <script src="/dist/app-shop.js"></script>
+        ${appUrls}
         ${jsLinks}
       </body>
     </html>
@@ -110,7 +128,7 @@ const loadAppContent = (
     };
   }
   return superagent
-    .get(`http://localhost:${appPort}${url}?embedded`)
+    .get(`${appUrl(name, appPort)}{url}?embedded`)
     .then(({ text }) => ({
       html: text,
       containerId,

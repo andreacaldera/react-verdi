@@ -38,6 +38,7 @@ const selectedProductId = (state = null, action) => {
 
 const appReducers = combineReducers({
   products: (state = {}) => state,
+  baseUrl: (state = {}) => state,
   selectedProductId,
   productIdsInBag,
 });
