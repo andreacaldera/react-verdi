@@ -10,7 +10,7 @@ import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
 import { APP_NAME, APP_CONTAINER_ID } from '../common/constants';
 import { NAMESPACE } from '../common/modules/constants';
-import { ROUTE_CHANGED } from '../../node_modules/react-verdi/examples/app-shop/app-shop/src/common/modules/meta/constants';
+import { ROUTE_CHANGED } from '../common/modules/meta/constants';
 
 const {
   history,

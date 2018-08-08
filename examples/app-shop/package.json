@@ -1,0 +1,11 @@
+{
+    "name": "shop-web",
+    "version": "0.0.1",
+    "description": "shop-web",
+    "scripts": {
+    },
+    "dependencies": {
+    },
+    "devDependencies": {
+    }
+}

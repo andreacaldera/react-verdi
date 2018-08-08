@@ -25,7 +25,7 @@ fs.writeFile('./pid', process.pid, (err) => {
 });
 
 const app = Express();
-const port = 3001;
+const port = 8080;
 
 const activeApps = config.apps.filter(({ disable }) => !disable);
 
