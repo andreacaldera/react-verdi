@@ -15,7 +15,6 @@ import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
 import { APP_NAME, APP_CONTAINER_ID } from '../common/constants';
 import { NAMESPACE } from '../common/modules/constants';
-import api from './api';
 
 fs.writeFile('./pid', process.pid, (err) => {
   if (err) {
@@ -23,6 +22,9 @@ fs.writeFile('./pid', process.pid, (err) => {
   }
   logger.info(`${APP_NAME} running with pid ${process.pid}`);
 });
+
+const APP_CONFIG_BASE_URL =
+  process.env.APP_CONFIG_BASE_URL || 'http://localhost:8081';
 
 const app = Express();
 const port = global.process.env.PORT || 8080;
@@ -33,28 +35,25 @@ app.use(cookieParser());
 
 const serialiseState = (state) => JSON.stringify(state).replace(/</g, '\\x3c');
 
-const appEnvBaseVariable = (name = '') =>
-  `${name.toUpperCase().replace('-', '_')}_BASE_URL`;
+const baseUrl = (endpoints, { name }) => `${endpoints[`${name}BaseUrl`]}`;
 
-const appUrl = ({ name, appPort }) => {
-  const baseUrl = global.process.env[appEnvBaseVariable(name)];
-  return baseUrl || `http://localhost:${appPort}`;
-};
-
-function renderFullPage(content, appsContent, store) {
+function renderFullPage(content, appsContent, store, endpoints) {
   const cssLinks = activeApps
     .map(
       (appConfig) =>
-        `<link rel="stylesheet" type="text/css" href="${appUrl(appConfig)}${
-          appConfig.cssPath
-        }" />`
+        `<link rel="stylesheet" type="text/css" href="${baseUrl(
+          endpoints,
+          appConfig
+        )}${appConfig.cssPath}" />`
     )
     .join(' ');
 
   const jsLinks = activeApps
     .map(
       (appConfig) =>
-        `<script src="${appUrl(appConfig)}${appConfig.jsPath}"></script>`
+        `<script src="${baseUrl(endpoints, appConfig)}${
+          appConfig.jsPath
+        }"></script>`
     )
     .join(' ');
 
@@ -64,17 +63,6 @@ function renderFullPage(content, appsContent, store) {
         <div class="${className}"><div id="${containerId}"> 
           ${html}
         </div></div>
-      `
-    )
-    .join(' ');
-
-  // TODO remove this terrible hack for passing apps URLs to client
-  const appUrls = activeApps
-    .map(
-      (appConfig) => `
-        <script>window['${appEnvBaseVariable(appConfig.name)}'] = '${appUrl(
-        appConfig
-      )}';</script>
       `
     )
     .join(' ');
@@ -97,7 +85,6 @@ function renderFullPage(content, appsContent, store) {
         ${appsHtml}
         <script>window.__PARENT_APP_INITIAL_STATE__ = ${serialisedState}</script>
         <script src="/dist/app-shop.js"></script>
-        ${appUrls}
         ${jsLinks}
       </body>
     </html>
@@ -108,13 +95,12 @@ app.use('/dist', Express.static(path.join(__dirname, '../../dist')));
 
 app.use('/', Express.static(path.join(__dirname, '../../public')));
 
-app.use('/api', api());
-
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
 const loadAppContent = (
   url,
-  { name, urlPathRegex, containerId, className, appPort }
+  { name, urlPathRegex, containerId, className },
+  endpoints
 ) => {
   const matches = url.match(new RegExp(urlPathRegex));
   logger.debug(
@@ -128,7 +114,7 @@ const loadAppContent = (
     };
   }
   return superagent
-    .get(`${appUrl(name, appPort)}{url}?embedded`)
+    .get(`${baseUrl(endpoints, { name })}{url}?embedded`)
     .then(({ text }) => ({
       html: text,
       containerId,
@@ -145,20 +131,27 @@ const loadAppContent = (
 };
 
 app.use((req, res) =>
-  Promise.all(
-    activeApps.map((appConfig) => loadAppContent(req.url, appConfig))
-  ).then((appsContent) => {
-    const preloadedState = { [NAMESPACE]: { meta: {} } };
-    const store = configureStore({ state: preloadedState });
+  superagent(APP_CONFIG_BASE_URL).then(({ body }) => {
+    const { endpoints } = body.appShop;
 
-    const content = renderToString(
-      <Provider store={store}>
-        <StaticRouter location={req.url} context={{}}>
-          {renderRoutes(routes)}
-        </StaticRouter>
-      </Provider>
-    );
-    res.send(renderFullPage(content, appsContent, store));
+    return Promise.all(
+      activeApps.map((appConfig) =>
+        loadAppContent(req.url, appConfig, endpoints)
+      )
+    ).then((appsContent) => {
+      const preloadedState = { [NAMESPACE]: { meta: {} } };
+      const store = configureStore({ state: preloadedState });
+
+      const content = renderToString(
+        <Provider store={store}>
+          <StaticRouter location={req.url} context={{}}>
+            {renderRoutes(routes)}
+          </StaticRouter>
+        </Provider>
+      );
+
+      res.send(renderFullPage(content, appsContent, store, endpoints));
+    });
   })
 );
 

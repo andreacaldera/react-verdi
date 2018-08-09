@@ -9,6 +9,7 @@ import { renderRoutes } from 'react-router-config';
 import UrlPatter from 'url-pattern';
 import _ from 'lodash';
 import cors from 'cors';
+import superagent from 'superagent';
 import fs from 'fs';
 
 import logger from './logger';
@@ -31,8 +32,8 @@ fs.writeFile('./pid', process.pid, (err) => {
 
 const port = global.process.env.PORT || APP_PORT;
 
-const baseUrl =
-  global.process.env.APP_PRODUCT_BASE_URL || `http://localhost:${port}`;
+const APP_CONFIG_BASE_URL =
+  process.env.APP_CONFIG_BASE_URL || 'http://localhost:8081';
 
 const urlPattern = new UrlPatter(APP_PATTERN);
 
@@ -57,7 +58,8 @@ app.use(cors());
 
 app.use(cookieParser());
 
-function renderFullPage(content, store) {
+function renderFullPage(content, store, endpoints) {
+  const baseUrl = endpoints.appProductBaseUrl;
   const stateString = JSON.stringify(store.getState()).replace(/</g, '\\x3c');
   return `
     <!doctype html>
@@ -90,34 +92,37 @@ app.use('/api', api());
 
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
-app.use((req, res) => {
-  const selectedProductId = _.get(urlPattern.match(req.url), 'productId');
-  const preloadedState = {
-    [NAMESPACE]: {
-      selectedProductId,
-      products,
-      baseUrl,
-    },
-  };
+app.use((req, res) =>
+  superagent(APP_CONFIG_BASE_URL).then(({ body }) => {
+    const { endpoints } = body.appShop;
 
-  if (req.headers.accept === 'application/json') {
-    return res.json(preloadedState);
-  }
+    const selectedProductId = _.get(urlPattern.match(req.url), 'productId');
+    const preloadedState = {
+      [NAMESPACE]: {
+        selectedProductId,
+        products,
+      },
+    };
 
-  const store = configureStore({ state: preloadedState });
+    if (req.headers.accept === 'application/json') {
+      return res.json(preloadedState);
+    }
 
-  const content = renderToString(
-    <Provider store={store}>
-      <StaticRouter location={req.url} context={{}}>
-        {renderRoutes(routes)}
-      </StaticRouter>
-    </Provider>
-  );
-  const html = req.url.endsWith('?embedded') // TODO use url-pattern
-    ? renderEmbeddedApp(content, store)
-    : renderFullPage(content, store);
-  res.send(html);
-});
+    const store = configureStore({ state: preloadedState });
+
+    const content = renderToString(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={{}}>
+          {renderRoutes(routes)}
+        </StaticRouter>
+      </Provider>
+    );
+    const html = req.url.endsWith('?embedded') // TODO use url-pattern
+      ? renderEmbeddedApp(content, store)
+      : renderFullPage(content, store, endpoints);
+    res.send(html);
+  })
+);
 
 app.listen(port, (error) => {
   if (error) {
