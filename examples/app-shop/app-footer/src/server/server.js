@@ -10,6 +10,8 @@ import logger from './logger';
 import Footer from '../common/components/Footer';
 import { APP_CONTAINER_ID, APP_PORT, APP_NAME } from '../common/constants';
 
+const port = process.env.PORT || APP_PORT;
+
 const app = Express();
 
 app.use(cors());
@@ -21,13 +23,13 @@ function renderFullPage(content) {
     <!doctype html>
     <html>
       <head>
-        <link rel="stylesheet" type="text/css" href="http://localhost:${APP_PORT}/dist/${APP_NAME}.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/${APP_NAME}.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
       <title>Footer</title>
       </head>
       <body>
         <div id="${APP_CONTAINER_ID}">${content}</div>
-        <script src="http://localhost:${APP_PORT}/dist/${APP_NAME}.js"></script>
+        <script src="/dist/${APP_NAME}.js"></script>
       </body>
     </html>
     `;
@@ -37,7 +39,6 @@ fs.writeFile('./pid', process.pid, (err) => {
   if (err) throw err;
   logger.info(`${APP_NAME} running with pid ${process.pid}`);
 });
-
 
 function renderEmbeddedApp(content) {
   return `
@@ -50,19 +51,17 @@ app.use('/dist', Express.static(path.join(__dirname, '../../dist')));
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
 app.use((req, res) => {
-  const content = renderToString(
-    <Footer />
-  );
-  const html = req.url.endsWith('?embedded') ? // TODO use url-pattern
-    renderEmbeddedApp(content) :
-    renderFullPage(content);
+  const content = renderToString(<Footer />);
+  const html = req.url.endsWith('?embedded') // TODO use url-pattern
+    ? renderEmbeddedApp(content)
+    : renderFullPage(content);
   res.send(html);
 });
 
-app.listen(APP_PORT, (error) => {
+app.listen(port, (error) => {
   if (error) {
     logger.error(error);
   } else {
-    logger.info(`${APP_NAME}: http://localhost:${APP_PORT}/`);
+    logger.info(`${APP_NAME}: http://localhost:${port}/`);
   }
 });

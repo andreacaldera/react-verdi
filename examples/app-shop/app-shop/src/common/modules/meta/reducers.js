@@ -6,11 +6,13 @@ const activePage = (state = '', action) => {
   switch (action.type) {
     case SET_ACTIVE_PAGE:
       return action.activePage;
-    default: return state;
+    default:
+      return state;
   }
 };
 
 module.exports = combineReducers({
   featureToggles: (state = []) => state,
+  endpoints: (state = {}) => state,
   activePage,
 });

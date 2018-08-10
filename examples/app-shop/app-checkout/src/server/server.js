@@ -20,6 +20,8 @@ import {
   APP_NAME,
 } from '../common/constants';
 
+const port = process.env.PORT || APP_PORT;
+
 fs.writeFile('./pid', process.pid, (err) => {
   if (err) throw err;
   console.log(`${APP_NAME} running with pid ${process.pid}`); // eslint-disable-line no-console
@@ -39,14 +41,14 @@ function renderFullPage(content, store) {
     <!doctype html>
     <html>
       <head>
-        <link rel="stylesheet" type="text/css" href="http://localhost:${APP_PORT}/dist/${APP_NAME}.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/${APP_NAME}.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
       <title>Checkout</title>
       </head>
       <body>
         <div id="${APP_CONTAINER_ID}">${content}</div>
         <script>window.${APP_REDUX_STATE_ID} = ${serialisedState}</script>
-        <script src="http://localhost:${APP_PORT}/dist/${APP_NAME}.js"></script>
+        <script src="/dist/${APP_NAME}.js"></script>
       </body>
     </html>
     `;
@@ -104,10 +106,10 @@ app.use((req, res) => {
   );
 });
 
-app.listen(APP_PORT, (error) => {
+app.listen(port, (error) => {
   if (error) {
     console.error(error); // eslint-disable-line no-console
   } else {
-    console.info(`${APP_NAME}: http://localhost:${APP_PORT}/checkout`); // eslint-disable-line no-console
+    console.info(`${port}: http://localhost:${port}/checkout`); // eslint-disable-line no-console
   }
 });

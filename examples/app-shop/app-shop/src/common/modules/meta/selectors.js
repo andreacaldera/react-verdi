@@ -7,6 +7,11 @@ export const getFeatureToggles = createSelector(
   ({ featureToggles }) => featureToggles
 );
 
+export const getEndpoints = createSelector(
+  getMetaSelector,
+  ({ endpoints }) => endpoints
+);
+
 export const getActivePage = createSelector(
   getMetaSelector,
   ({ activePage }) => activePage

@@ -92,6 +92,25 @@ app.use('/', Express.static(path.join(__dirname, '../../public')));
 
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
+app.use('/api/:appName/*', (req, res) => {
+  const appConfig = config.apps.find(({ name }) => name === req.params.appName);
+  if (!appConfig) {
+    logger.error(`Unable to find app config using name ${req.params.appName}`);
+    return res.sendStatus(500);
+  }
+
+  const url = `${baseUrl(appConfig)}${req.originalUrl}`;
+  logger.debug(`Using URL ${url}`);
+  superagent(url)
+    .then(({ body }) => {
+      res.json(body);
+    })
+    .catch((err) => {
+      logger.error(`Unable to load data from URL ${url}`, err);
+      return res.sendStatus(500);
+    });
+});
+
 const loadAppContent = (
   url,
   {
@@ -114,15 +133,21 @@ const loadAppContent = (
       className,
     };
   }
+
+  const appBaseUrl = baseUrl({
+    baseUrlEnvironmentVariable,
+    appPort,
+  });
+  const appUrl = `${appBaseUrl}${url}?embedded`;
   return superagent
-    .get(`${baseUrl({ baseUrlEnvironmentVariable, appPort })}{url}?embedded`)
+    .get(appUrl)
     .then(({ text }) => ({
       html: text,
       containerId,
       className,
     }))
     .catch((err) => {
-      logger.error(`Unable to load ${name}`, err);
+      logger.error(`Unable to load ${name} from URL ${appUrl}`, err);
       return {
         html: `<i class="error">Unable to load <bold>${name}</bold></i>`,
         containerId,
@@ -131,11 +156,18 @@ const loadAppContent = (
     });
 };
 
+const endpoints = activeApps.reduce((result, appConfig) => {
+  return {
+    ...result,
+    [appConfig.name]: baseUrl(appConfig),
+  };
+}, {});
+
 app.use((req, res) =>
   Promise.all(
     activeApps.map((appConfig) => loadAppContent(req.url, appConfig))
   ).then((appsContent) => {
-    const preloadedState = { [NAMESPACE]: { meta: {} } };
+    const preloadedState = { [NAMESPACE]: { meta: { endpoints } } };
     const store = configureStore({ state: preloadedState });
 
     const content = renderToString(

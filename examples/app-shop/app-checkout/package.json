@@ -44,7 +44,7 @@
     "react-redux": "^5.0.6",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
-    "react-verdi": "file:../../../../react-verdi",
+    "react-verdi": "1.0.1",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.3.0",

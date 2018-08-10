@@ -15,10 +15,8 @@ import {
   APP_REDUX_STATE_ID,
   APP_PATTERN,
   APP_NAME,
-  APP_PORT,
 } from '../common/constants';
 import { NAMESPACE, ROUTE_CHANGED } from '../common/modules/constants';
-// import { getBaseUrl } from '../common/modules/selectors';
 
 const {
   register,
@@ -60,9 +58,8 @@ function configureApp(state) {
 }
 
 const fetchData = () => {
-  const baseUrl = window.APP_PRODUCT_BASE_URL || `http://localhost:${APP_PORT}`; // TODO remove this horrible hack!
-  logger('fetching data', baseUrl);
-  return superagent(`${baseUrl}${window.location.pathname}`)
+  logger('fetching data', `/api/appProduct${window.location.pathname}`);
+  return superagent(`/api/appProduct${window.location.pathname}`)
     .set('Accept', 'application/json')
     .then(({ body }) => body);
 };

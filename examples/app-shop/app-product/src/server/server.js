@@ -9,14 +9,12 @@ import { renderRoutes } from 'react-router-config';
 import UrlPatter from 'url-pattern';
 import _ from 'lodash';
 import cors from 'cors';
-import superagent from 'superagent';
 import fs from 'fs';
 
 import logger from './logger';
 import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
 import { NAMESPACE } from '../common/modules/constants';
-import api from './api';
 import {
   APP_CONTAINER_ID,
   APP_REDUX_STATE_ID,
@@ -31,9 +29,6 @@ fs.writeFile('./pid', process.pid, (err) => {
 });
 
 const port = global.process.env.PORT || APP_PORT;
-
-const APP_CONFIG_BASE_URL =
-  process.env.APP_CONFIG_BASE_URL || 'http://localhost:8081';
 
 const urlPattern = new UrlPatter(APP_PATTERN);
 
@@ -87,20 +82,21 @@ function renderEmbeddedApp(content, store) {
 
 app.use('/dist', Express.static(path.join(__dirname, '../../dist')));
 
-app.use('/api', api());
-
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
-app.use((req, res) => {
+const getPreloadedState = (req) => {
   const selectedProductId = _.get(urlPattern.match(req.url), 'productId');
-  const preloadedState = { [NAMESPACE]: { selectedProductId, products } };
+  return { [NAMESPACE]: { selectedProductId, products } };
+};
 
-  if (req.headers.accept === 'application/json') {
-    return res.json(preloadedState);
-  }
+app.use('/api/appProduct', (req, res) => {
+  logger.debug(`Loading state from URL ${req.url}`);
+  res.json(getPreloadedState(req));
+});
 
+app.use((req, res) => {
   const store = configureStore({
-    state: preloadedState,
+    state: getPreloadedState(req),
   });
 
   const content = renderToString(

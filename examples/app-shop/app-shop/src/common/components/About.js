@@ -1,7 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-const About = () => (
+import { getEndpoints } from '../modules/meta/selectors';
+
+const About = ({ endpoints }) => (
   <div>
     <h1>About</h1>
 
@@ -17,7 +20,7 @@ const About = () => (
         <a
           className="application__link"
           target="_app-header"
-          href="http://localhost:7001"
+          href={endpoints.appHeader}
         >
           app-header
         </a>
@@ -27,7 +30,7 @@ const About = () => (
         <a
           className="application__link"
           target="_app-product"
-          href="http://localhost:4001/products"
+          href={`${endpoints.appProduct}/products`}
         >
           app-product
         </a>
@@ -37,7 +40,7 @@ const About = () => (
         <a
           className="application__link"
           target="_app-checkout"
-          href="http://localhost:5001/checkout"
+          href={`${endpoints.appCheckout}/checkout`}
         >
           app-checkout
         </a>
@@ -47,7 +50,7 @@ const About = () => (
         <a
           className="application__link"
           target="_app-footer"
-          href="http://localhost:6001/"
+          href={endpoints.appFooter}
         >
           app-footer
         </a>
@@ -57,7 +60,15 @@ const About = () => (
   </div>
 );
 
+About.props = {
+  endpoint: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  endpoints: getEndpoints(state),
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   null
 )(About);
