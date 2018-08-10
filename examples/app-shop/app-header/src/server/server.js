@@ -8,18 +8,20 @@ import StaticRouter from 'react-router-dom/StaticRouter';
 import { renderRoutes } from 'react-router-config';
 import cors from 'cors';
 import fs from 'fs';
+import superagent from 'superagent';
 
 import logger from './logger';
 import configureStore from '../common/store/configure-store';
 import routes from '../common/routes';
 import { NAMESPACE } from '../common/modules/constants';
-import api from './api';
 import {
   APP_CONTAINER_ID,
   APP_REDUX_STATE_ID,
   APP_PORT,
   APP_NAME,
 } from '../common/constants';
+
+const port = global.process.env.PORT || APP_PORT;
 
 fs.writeFile('./pid', process.pid, (err) => {
   if (err) throw err;
@@ -38,14 +40,14 @@ function renderFullPage(content, store) {
     <!doctype html>
     <html>
       <head>
-        <link rel="stylesheet" type="text/css" href="http://localhost:${APP_PORT}/dist/${APP_NAME}.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/${APP_NAME}.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
       <title>Product</title>
       </head>
       <body>
         <div id="${APP_CONTAINER_ID}">${content}</div>
         <script>window.${APP_REDUX_STATE_ID} = ${stateString}</script>
-      <script src="http://localhost:${APP_PORT}/dist/${APP_NAME}.js"></script>
+      <script src="/dist/${APP_NAME}.js"></script>
       </body>
     </html>
     `;
@@ -61,8 +63,6 @@ function renderEmbeddedApp(content, store) {
 
 app.use('/dist', Express.static(path.join(__dirname, '../../dist')));
 
-app.use('/api', api());
-
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
 app.use((req, res) => {
@@ -76,7 +76,9 @@ app.use((req, res) => {
     return res.json(preloadedState);
   }
 
-  const store = configureStore({ state: preloadedState });
+  const store = configureStore({
+    state: preloadedState,
+  });
 
   const content = renderToString(
     <Provider store={store}>
@@ -85,16 +87,18 @@ app.use((req, res) => {
       </StaticRouter>
     </Provider>
   );
-  const html = req.url.endsWith('?embedded') // TODO use url-pattern
+
+  // TODO use url-pattern
+  const html = req.url.endsWith('?embedded')
     ? renderEmbeddedApp(content, store)
     : renderFullPage(content, store);
   res.send(html);
 });
 
-app.listen(APP_PORT, (error) => {
+app.listen(port, (error) => {
   if (error) {
     logger.error(error);
   } else {
-    logger.info(`${APP_NAME}: http://localhost:${APP_PORT}`);
+    logger.info(`${APP_NAME}: http://localhost:${port}`);
   }
 });

@@ -9,6 +9,7 @@ export default {
       cssPath: '/dist/app-header.css',
       jsPath: '/dist/app-header.js',
       urlPathRegex: '/*',
+      baseUrlEnvironmentVariable: 'APP_HEADER_BASE_URL',
     },
     {
       disable: false,
@@ -19,6 +20,7 @@ export default {
       jsPath: '/dist/app-product.js',
       urlPathRegex: '/products/*',
       className: 'm-4',
+      baseUrlEnvironmentVariable: 'APP_PRODUCT_BASE_URL',
     },
     {
       disable: false,
@@ -29,6 +31,7 @@ export default {
       jsPath: '/dist/app-checkout.js',
       urlPathRegex: '/checkout',
       className: 'm-4',
+      baseUrlEnvironmentVariable: 'APP_CHECKOUT_BASE_URL',
     },
     {
       disable: false,
@@ -38,6 +41,7 @@ export default {
       cssPath: '/dist/app-footer.css',
       jsPath: '/dist/app-footer.js',
       urlPathRegex: '/*',
+      baseUrlEnvironmentVariable: 'APP_FOOTER_BASE_URL',
     },
   ],
 };

@@ -58,21 +58,20 @@ app.use(cors());
 
 app.use(cookieParser());
 
-function renderFullPage(content, store, endpoints) {
-  const baseUrl = endpoints.appProductBaseUrl;
+function renderFullPage(content, store) {
   const stateString = JSON.stringify(store.getState()).replace(/</g, '\\x3c');
   return `
     <!doctype html>
     <html>
       <head>
-        <link rel="stylesheet" type="text/css" href="${baseUrl}/dist/${APP_NAME}.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/${APP_NAME}.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
       <title>Product</title>
       </head>
       <body>
         <div id="${APP_CONTAINER_ID}">${content}</div>
         <script>window.${APP_REDUX_STATE_ID} = ${stateString}</script>
-      <script src="${baseUrl}/dist/${APP_NAME}.js"></script>
+      <script src="/dist/${APP_NAME}.js"></script>
       </body>
     </html>
     `;
@@ -92,37 +91,31 @@ app.use('/api', api());
 
 app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
-app.use((req, res) =>
-  superagent(APP_CONFIG_BASE_URL).then(({ body }) => {
-    const { endpoints } = body.appShop;
+app.use((req, res) => {
+  const selectedProductId = _.get(urlPattern.match(req.url), 'productId');
+  const preloadedState = { [NAMESPACE]: { selectedProductId, products } };
 
-    const selectedProductId = _.get(urlPattern.match(req.url), 'productId');
-    const preloadedState = {
-      [NAMESPACE]: {
-        selectedProductId,
-        products,
-      },
-    };
+  if (req.headers.accept === 'application/json') {
+    return res.json(preloadedState);
+  }
 
-    if (req.headers.accept === 'application/json') {
-      return res.json(preloadedState);
-    }
+  const store = configureStore({
+    state: preloadedState,
+  });
 
-    const store = configureStore({ state: preloadedState });
-
-    const content = renderToString(
-      <Provider store={store}>
-        <StaticRouter location={req.url} context={{}}>
-          {renderRoutes(routes)}
-        </StaticRouter>
-      </Provider>
-    );
-    const html = req.url.endsWith('?embedded') // TODO use url-pattern
-      ? renderEmbeddedApp(content, store)
-      : renderFullPage(content, store, endpoints);
-    res.send(html);
-  })
-);
+  const content = renderToString(
+    <Provider store={store}>
+      <StaticRouter location={req.url} context={{}}>
+        {renderRoutes(routes)}
+      </StaticRouter>
+    </Provider>
+  );
+  // TODO use url-pattern
+  const html = req.url.endsWith('?embedded')
+    ? renderEmbeddedApp(content, store)
+    : renderFullPage(content, store);
+  res.send(html);
+});
 
 app.listen(port, (error) => {
   if (error) {

@@ -23,9 +23,6 @@ fs.writeFile('./pid', process.pid, (err) => {
   logger.info(`${APP_NAME} running with pid ${process.pid}`);
 });
 
-const APP_CONFIG_BASE_URL =
-  process.env.APP_CONFIG_BASE_URL || 'http://localhost:8081';
-
 const app = Express();
 const port = global.process.env.PORT || 8080;
 
@@ -35,25 +32,23 @@ app.use(cookieParser());
 
 const serialiseState = (state) => JSON.stringify(state).replace(/</g, '\\x3c');
 
-const baseUrl = (endpoints, { name }) => `${endpoints[`${name}BaseUrl`]}`;
+const baseUrl = ({ baseUrlEnvironmentVariable, appPort }) =>
+  process.env[baseUrlEnvironmentVariable] || `http://localhost:${appPort}`;
 
-function renderFullPage(content, appsContent, store, endpoints) {
+function renderFullPage(content, appsContent, store) {
   const cssLinks = activeApps
     .map(
       (appConfig) =>
-        `<link rel="stylesheet" type="text/css" href="${baseUrl(
-          endpoints,
-          appConfig
-        )}${appConfig.cssPath}" />`
+        `<link rel="stylesheet" type="text/css" href="${baseUrl(appConfig)}${
+          appConfig.cssPath
+        }" />`
     )
     .join(' ');
 
   const jsLinks = activeApps
     .map(
       (appConfig) =>
-        `<script src="${baseUrl(endpoints, appConfig)}${
-          appConfig.jsPath
-        }"></script>`
+        `<script src="${baseUrl(appConfig)}${appConfig.jsPath}"></script>`
     )
     .join(' ');
 
@@ -99,8 +94,14 @@ app.use('/favicon.ico', (req, res) => res.sendStatus(200));
 
 const loadAppContent = (
   url,
-  { name, urlPathRegex, containerId, className },
-  endpoints
+  {
+    name,
+    urlPathRegex,
+    containerId,
+    className,
+    baseUrlEnvironmentVariable,
+    appPort,
+  }
 ) => {
   const matches = url.match(new RegExp(urlPathRegex));
   logger.debug(
@@ -114,7 +115,7 @@ const loadAppContent = (
     };
   }
   return superagent
-    .get(`${baseUrl(endpoints, { name })}{url}?embedded`)
+    .get(`${baseUrl({ baseUrlEnvironmentVariable, appPort })}{url}?embedded`)
     .then(({ text }) => ({
       html: text,
       containerId,
@@ -131,27 +132,21 @@ const loadAppContent = (
 };
 
 app.use((req, res) =>
-  superagent(APP_CONFIG_BASE_URL).then(({ body }) => {
-    const { endpoints } = body.appShop;
+  Promise.all(
+    activeApps.map((appConfig) => loadAppContent(req.url, appConfig))
+  ).then((appsContent) => {
+    const preloadedState = { [NAMESPACE]: { meta: {} } };
+    const store = configureStore({ state: preloadedState });
 
-    return Promise.all(
-      activeApps.map((appConfig) =>
-        loadAppContent(req.url, appConfig, endpoints)
-      )
-    ).then((appsContent) => {
-      const preloadedState = { [NAMESPACE]: { meta: {} } };
-      const store = configureStore({ state: preloadedState });
+    const content = renderToString(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={{}}>
+          {renderRoutes(routes)}
+        </StaticRouter>
+      </Provider>
+    );
 
-      const content = renderToString(
-        <Provider store={store}>
-          <StaticRouter location={req.url} context={{}}>
-            {renderRoutes(routes)}
-          </StaticRouter>
-        </Provider>
-      );
-
-      res.send(renderFullPage(content, appsContent, store, endpoints));
-    });
+    res.send(renderFullPage(content, appsContent, store));
   })
 );
 
