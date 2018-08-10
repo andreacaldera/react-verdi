@@ -36,4 +36,6 @@ If your application is using React 15, Redux, and React Router, add the followin
 
 ### Shop application
 
-[app-shop](https://github.com/andreacaldera/react-verdi/blob/master/examples/app-shop/README.md)
+[app-shop live demo](https://react-verdi-demo-app-shop.herokuapp.com/)
+
+[more information](https://github.com/andreacaldera/react-verdi/blob/master/examples/app-shop/README.md)
