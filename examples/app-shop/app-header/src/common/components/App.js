@@ -14,5 +14,5 @@ App.propTypes = {
 
 export default connect(
   null,
-  null,
+  null
 )(App);

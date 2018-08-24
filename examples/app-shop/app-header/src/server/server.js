@@ -8,7 +8,6 @@ import StaticRouter from 'react-router-dom/StaticRouter';
 import { renderRoutes } from 'react-router-config';
 import cors from 'cors';
 import fs from 'fs';
-import superagent from 'superagent';
 
 import logger from './logger';
 import configureStore from '../common/store/configure-store';
@@ -40,9 +39,10 @@ function renderFullPage(content, store) {
     <!doctype html>
     <html>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" type="text/css" href="/dist/${APP_NAME}.css" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-      <title>Product</title>
+      <title>Header</title>
       </head>
       <body>
         <div id="${APP_CONTAINER_ID}">${content}</div>
