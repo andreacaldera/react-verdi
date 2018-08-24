@@ -14,7 +14,8 @@ Applications can be rendered server side individually (standalone mode) and when
 
 In order to render an host app server side, the portal app should fetch the host app HTML server side and include the host app JS and CSS.
 
-`<!doctype html>
+```
+<!doctype html>
     <html>
       <head>
         <link rel="stylesheet" type="text/css" href="PORTAL_APP.css" />
@@ -32,7 +33,8 @@ In order to render an host app server side, the portal app should fetch the host
         <script src="PORTAL_APP.js"></script>
         <script src="HOST_APP.js"></script>
       </body>
-    </html>`
+    </html>
+```
 
 An example of this is available in [app-shop server](https://github.com/andreacaldera/react-verdi/blob/master/examples/app-shop/app-shop/src/server/server.js)
 
@@ -41,7 +43,7 @@ An example of this is available in [app-shop server](https://github.com/andreaca
 If your application is implemented in vanilla React 16, add the following to your client file.
 
 In order to include a host app within a port app, the following is required in the host app client JS.
-`
+```
 import { clientManager } from 'react-verdi';
 
 import Footer from '../common/components/Footer';
@@ -58,7 +60,8 @@ function getApp() {
 }
 
 register({ getApp });
-`
+```
+
 The parameters passed to __react-verdi__ are:
 - _APP_PATTERN_ will be used by __react-verdi__ to know if the host app needs to mounted / unmounted for a particula URL.
 - _APP_CONTAINER_ID_ will be used by __react-verdi__ to mount the host app to the its DOM element.
