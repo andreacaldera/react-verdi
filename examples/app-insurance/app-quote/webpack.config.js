@@ -1,7 +1,6 @@
 const path = require('path');
 
 module.exports = function(env, argv) {
-  
   // default to the server configuration
   const base = {
     entry: './src/server/index.ts',
@@ -15,23 +14,26 @@ module.exports = function(env, argv) {
     devtool: 'cheap-module-eval-source-map',
     resolve: {
       // Add '.ts' and '.tsx' as resolvable extensions.
-      extensions: [".ts", ".tsx", ".js", ".json"],
+      extensions: ['.ts', '.tsx', '.js', '.json'],
     },
     module: {
       rules: [
         // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
         {
           test: /\.tsx?$/,
-          use: [
-            {
-              loader: 'ts-loader',
-            }
-          ]
+          loader: 'awesome-typescript-loader',
         },
-      ]
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          use: ['babel-loader'],
+        },
+        // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+        { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+      ],
     },
-  }
-  
+  };
+
   // server-specific configuration
   if (env.platform === 'server') {
     base.target = 'node';
@@ -44,4 +46,4 @@ module.exports = function(env, argv) {
   }
 
   return base;
-}
+};

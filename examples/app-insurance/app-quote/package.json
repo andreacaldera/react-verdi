@@ -4,8 +4,10 @@
   "description": "app-quote",
   "scripts": {
     "tsc": "tsc",
+    "tsc-watch": "tsc --watch",
+    "what": "webpack --env.platform=server",
     "start": "node dist/server/index.js",
-    "dev": "nodemon src/server/index.ts --exec tsc",
+    "dev": "nodemon dist/server/index.js --watch dist/server",
     "lint": "eslint .",
     "test": "mocha test/unit && jest test/component",
     "jest": "jest test/component",
